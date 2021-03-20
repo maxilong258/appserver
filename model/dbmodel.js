@@ -20,11 +20,11 @@ var FriendSchema = new Schema({
   state: { type: String },                          //好友状态 0表示已为好友 1表示申请中 2表示未通过
   markname: { type: String },
   time: { type: Date },                              //好友状态建立时间
-  lastTime: { type: Date }
+  lastTime: { type: Date }                           //好友最后通讯时间
 })
 
 var MessageSchema = new Schema({
-  uerID: { type: Schema.Types.ObjectId, ref: 'User' },
+  userID: { type: Schema.Types.ObjectId, ref: 'User' },
   friendID: { type: Schema.Types.ObjectId, ref: 'User' },
   message: { type: String },
   types: { type: String },                           //内容类型 0文字 1图片 2音频
@@ -33,7 +33,7 @@ var MessageSchema = new Schema({
 })
 
 var GroupSchema = new Schema({
-  uerID: { type: Schema.Types.ObjectId, ref: 'User' },
+  userID: { type: Schema.Types.ObjectId, ref: 'User' },
   name: { type: String },
   imgurl: { type: String, default: 'group.png' },
   time: { type: Date },

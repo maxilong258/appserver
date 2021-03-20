@@ -6,23 +6,11 @@ const signin = require('../server/signin')
 const search = require('../server/search')
 const user = require('../server/userdetail')
 const friend = require('../server/friend')
+const index = require('../server/index')
 
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.send('helloWorld!')
-})
-
-// router.get('/test', (req, res) => {
-//   res.send('666')
-// })
-
-// router.post('/mail', (req, res) => {
-//   let mail = req.body.mail
-//   emailserver.emailSignUp(mail, res)
-//   console.log(mail);
-// })
 //注册
 router.post('/signup/add', (req, res) => {
   signup.signUp(req, res)
@@ -78,4 +66,15 @@ router.post('/friend/updatefriendstate', (req, res) => {
 router.post('/friend/deletefriend', (req, res) => {
   friend.deleteFriend(req, res)
 })
+
+//主页 获取好友
+router.post('/index/getfriend', (req, res) => {
+  index.getFriend(req, res)
+})
+
+//获取最后一条消息
+router.post('/index/getlastmsg', (req, res) => {
+  index.getLastMsg(req, res)
+})
+
 module.exports = router

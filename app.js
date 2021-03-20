@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const router = require('./router/index.js')
+const router = require('./router/index')
+const files = require('./router/files')
 const jwt = require('./dao/jwt')
 
 const port = 2333
@@ -20,6 +21,8 @@ app.all('*', function (req, res, next) {
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+app.use(express.static(__dirname + '/data'))
+
 app.use(function (req, res, next) {
   if (typeof (req.body.token) != 'undefined') {
     //处理token匹配
@@ -33,6 +36,7 @@ app.use(function (req, res, next) {
 })
 
 app.use(router)
+app.use(files)
 
 //404处理
 app.use(function (req, res, next) {

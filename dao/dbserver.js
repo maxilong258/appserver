@@ -1,3 +1,4 @@
+const { populate } = require('../model/dbmodel')
 var dbmodel = require('../model/dbmodel')
 var User = dbmodel.model('User')
 const Friend = dbmodel.model('Friend')
@@ -142,7 +143,7 @@ module.exports.userUpdate = (data, res) => {
     updatestr[data.type] = data.data
     User.countDocuments(updatestr, (err, result) => {
       if (err) return res.send({ status: 500 })
-      if (result === 0) update(daat.id, updatestr, res)
+      if (result === 0) update(data.id, updatestr, res)
       else res.send({ status: 300, message: '已经存在' })
     })
   } else {
@@ -232,7 +233,7 @@ module.exports.applyFriend = function (data, res) {
 
 //更新好友状态
 module.exports.updateFriendState = (data, res) => {
-  const wherestr = { $or: [{ 'userID': data.uid, 'friendID': data.fid }, { 'userID': data.fid, friendID: data.uid }] }
+  const wherestr = { $or: [{ 'userID': data.uid, 'friendID': data.fid }, { 'userID': data.fid, 'friendID': data.uid }] }
   Friend.updateMany(wherestr, { 'state': 0 }, (err, result) => {
     if (err) res.send({ status: 500 })
     else res.send({ status: 200 })
@@ -241,10 +242,50 @@ module.exports.updateFriendState = (data, res) => {
 
 //拒绝或删除好友
 module.exports.deleteFriend = (data, res) => {
-  const wherestr = { $or: [{ 'userID': data.uid, 'friendID': data.fid }, { 'userID': data.fid, friendID: data.uid }] }
+  const wherestr = { $or: [{ 'userID': data.uid, 'friendID': data.fid }, { 'userID': data.fid, 'friendID': data.uid }] }
   Friend.deleteMany(wherestr, (err, result) => {
     if (err) res.send({ status: 500 })
     else res.send({ status: 200 })
+  })
+}
+
+//按要求获取用户列表
+module.exports.getUsers = (data, res) => {
+  let query = Friend.find({})
+  query.where({ 'userID': data.uid, 'state': data.state })
+  query.populate('friendID')
+  query.sort({ 'lastTime': -1 })
+  query.exec().then((e) => {
+    let result = e.map((ver) => {
+      return {
+        id: ver.friendID._id,
+        name: ver.friendID.name,
+        markname: ver.markname,
+        imgurl: ver.friendID.imgurl,
+        lastTime: ver.lastTime
+      }
+    })
+    res.send({ status: 200, result })
+  }).catch((err) => {
+    res.send({ status: 500 })
+  })
+}
+
+//按要求获取一条一对一消息
+module.exports.getOneMsg = (data, res) => {
+  let query = Message.findOne({})
+  query.where({ $or: [{ 'userID': data.uid, 'friendID': data.fid }, { 'userID': data.fid, 'friendID': data.uid }] })
+  query.sort({ 'time': -1 })
+  //console.log(query);
+  query.exec().then((ver) => {
+    let result = {
+      message: ver.message,
+      time: ver.time,
+      types: ver.types
+    }
+    res.send({ status: 200, result })
+  }).catch((err) => {
+    res.send({ status: 500 })
   })
 }
 
