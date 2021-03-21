@@ -10,3 +10,16 @@ module.exports.getLastMsg = (req, res) => {
   let data = req.body
   dbserver.getOneMsg(data, res)
 }
+
+//获取好友未读消息树
+module.exports.unreadMsg = (req, res) => {
+  let data = req.body
+  dbserver.unreadMsg(data, res)
+}
+
+//消息标为已读
+
+module.exports.updateMsg = (req, res) => {
+  let data = req.body
+  dbserver.updateMsg(data, res)
+}

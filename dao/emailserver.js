@@ -10,19 +10,21 @@ var transporter = nodemailer.createTransport({
   }
 })
 
-// module.exports.emailSignUp = (email, res) => {
-//   let options = {
-//     from: '1948487742@qq.com',
-//     to: email,
-//     subject: 'thankyou for singin',
-//     html: '<a href="http://localhost:8080/">点击</a>'
-//   }
+module.exports.emailSignUp = (email, res) => {
+  let options = {
+    from: '1948487742@qq.com',
+    to: email,
+    subject: 'thankyou for singin',
+    html: '<a href="http://localhost:8080/">点击</a>'
+  }
 
-//   transporter.sendMail(options, (err, msg) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       console.log('发送成功')
-//     }
-//   })
-// }
+  transporter.sendMail(options, (err, msg) => {
+    if (err) {
+      res.send(err),
+        console.log(err);
+    } else {
+      res.send('邮件发送成功'),
+        console.log('发送成功')
+    }
+  })
+}

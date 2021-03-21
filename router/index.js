@@ -77,4 +77,14 @@ router.post('/index/getlastmsg', (req, res) => {
   index.getLastMsg(req, res)
 })
 
+//获取好友未读消息树
+router.post('/index/unreadmsg', (req, res) => {
+  index.unreadMsg(req, res)
+})
+
+//消息标为已读
+router.post('/index/updatemsg', (req, res) => {
+  index.updateMsg(req, res)
+})
+
 module.exports = router

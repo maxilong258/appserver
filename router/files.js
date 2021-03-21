@@ -21,8 +21,13 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 files.post('/files/upload', upload.array('file', 10), (req, res, result) => {
-  let data = req.files[0].filename
-  res.send(data)
+  let url = req.body.url
+  //let data = req.files[0].filename
+
+  let name = req.files[0].filename
+  let imgUrl = '/' + url + '/' + name
+  res.send(imgUrl)
+  //res.send(data)
 })
 
 

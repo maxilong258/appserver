@@ -18,8 +18,8 @@ module.exports.buildUser = (name, mail, pwd, res) => {
   }
   let user = new User(data);
   user.save((err, result) => {
-    if (err) return res.status(500).send("server error")
-    res.status(200).send('成功')
+    if (err) return res.send({ status: 500 })
+    res.send({ status: 200 })
   })
 }
 
@@ -28,8 +28,8 @@ module.exports.countUserValue = (data, type, res) => {
   let wherestr = {}
   wherestr[type] = data
   User.countDocuments(wherestr, (err, result) => {
-    if (err) return res.status(500).send('server error')
-    return res.status(200).send(result)
+    if (err) return res.send({ status: 500, })
+    return res.send({ status: 200, result })
   })
 }
 
@@ -39,8 +39,8 @@ module.exports.userMatch = (data, pwd, res) => {
   let out = { 'name': 1, 'imgurl': 1, 'psw': 1 }
 
   User.find(wherestr, out, function (err, result) {
-    if (err) return res.status(500)
-    if (result === '') return res.status(400)
+    if (err) return res.send({ status: 500 })
+    if (result == '') return res.send({ status: 400 })
     result.map((e) => {
       const pwdMatch = bcrypt.verification(pwd, e.psw)
       if (pwdMatch) {
@@ -53,7 +53,7 @@ module.exports.userMatch = (data, pwd, res) => {
         }
         return res.send({ status: 200, back })
       } else {
-        return res.status(400)
+        return res.send({ status: 400 })
       }
     })
   })
@@ -278,7 +278,7 @@ module.exports.getOneMsg = (data, res) => {
   query.sort({ 'time': -1 })
   //console.log(query);
   query.exec().then((ver) => {
-    let result = {
+    const result = {
       message: ver.message,
       time: ver.time,
       types: ver.types
@@ -286,6 +286,25 @@ module.exports.getOneMsg = (data, res) => {
     res.send({ status: 200, result })
   }).catch((err) => {
     res.send({ status: 500 })
+  })
+}
+
+//汇总未读一对一消息数
+module.exports.unreadMsg = (data, res) => {
+  const wherestr = { 'userID': data.uid, 'friendID': data.fid, 'state': 1 }
+  Message.countDocuments(wherestr, (err, result) => {
+    if (err) res.send({ status: 500 })
+    else res.send({ status: 200, result })
+  })
+}
+
+//一对一消息状态修改
+module.exports.updateMsg = (data, res) => {
+  const wherestr = { 'userID': data.uid, 'friendID': data.fid, 'state': 1 }
+  const updatestr = { 'state': 0 }
+  Message.updateMany(wherestr, updatestr, (err, result) => {
+    if (err) res.send({ status: 500 })
+    else res.send({ status: 200 })
   })
 }
 
