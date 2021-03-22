@@ -6,7 +6,7 @@ module.exports.searchUser = (req, res) => {
 }
 
 module.exports.isFriend = (req, res) => {
-  const data = req.body.uid
+  const uid = req.body.uid
   const fid = req.body.fid
   dbserver.isFriend(uid, fid, res)
 }

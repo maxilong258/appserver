@@ -157,7 +157,7 @@ module.exports.getMarkName = (data, res) => {
   const out = { 'markname': 1 }
   Friend.findOne(wherestr, out, (err, result) => {
     if (err) res.send({ status: 500 })
-    else res.send({ status: 200 })
+    else res.send({ status: 200, result })
   })
 }
 
@@ -223,7 +223,7 @@ module.exports.applyFriend = function (data, res) {
     if (err) return res.send({ status: 500 })
     if (result === 0) {
       this.buildFriend(data.uid, data.fid, 2)
-      this.buildFriend(data.fid, data.uid, 1)
+      this.buildFriend(data.uid, data.fid, 1)
     } else {
       this.upFriendLastTime(data)
     }

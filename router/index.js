@@ -45,7 +45,7 @@ router.post('/user/update', (req, res) => {
   user.userUpdate(req, res)
 })
 //好友昵称获取
-router.post('user/getmarkname', (req, res) => {
+router.post('/user/getmarkname', (req, res) => {
   user.getMarkName(req, res)
 })
 //好友昵称修改
