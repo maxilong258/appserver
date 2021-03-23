@@ -223,7 +223,7 @@ module.exports.applyFriend = function (data, res) {
     if (err) return res.send({ status: 500 })
     if (result === 0) {
       this.buildFriend(data.uid, data.fid, 2)
-      this.buildFriend(data.uid, data.fid, 1)
+      this.buildFriend(data.fid, data.uid, 1)
     } else {
       this.upFriendLastTime(data)
     }
