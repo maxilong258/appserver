@@ -218,7 +218,7 @@ module.exports.insertMsg = (uid, fid, msg, type, res) => {
 //好友申请
 module.exports.applyFriend = function (data, res) {
   //判断是否已经申请过
-  const wherestr = { 'userId': data.uid, 'friend': data.fid }
+  const wherestr = { $or: [{ 'userID': data.uid, 'friendID': data.fid }, { 'userID': data.fid, 'friendID': data.uid }] }
   Friend.countDocuments(wherestr, (err, result) => {
     if (err) return res.send({ status: 500 })
     if (result === 0) {
@@ -308,5 +308,38 @@ module.exports.updateMsg = (data, res) => {
   })
 }
 
+//消息操作
+//分页获取一对一聊天数据
+module.exports.msg = (data, res) => {
+  //跳过的条数
+  let skipNum = data.nowPage * data.pageSize
+  let query = Message.find({})
+  //查询条件
+  query.where({ $or: [{ 'userID': data.uid, 'friendID': data.fid }, { 'userID': data.fid, 'friendID': data.uid }] })
+  //排序方式
+  query.sort({ 'time': -1 })
+  //查找friendID关联的user对象
+  query.populate('userID')
+  //跳过条数
+  query.skip(skipNum)
+  //一页条数
+  query.limit(data.pageSize)
+  //查询结果
+  query.exec().then((e) => {
+    let result = e.map((ver) => {
+      return {
+        id: ver._id,
+        message: ver.message,
+        types: ver.types,
+        time: ver.time,
+        fromId: ver.userID._id,
+        imgurl: ver.userID.imgurl
+      }
+    })
+    res.send({ status: 200, result })
+  }).catch((err) => {
+    res.send({ status: 500, err })
+  })
+}
 
 

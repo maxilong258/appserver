@@ -17,7 +17,7 @@ var UserSchema = new Schema({
 var FriendSchema = new Schema({
   userID: { type: Schema.Types.ObjectId, ref: 'User' },
   friendID: { type: Schema.Types.ObjectId, ref: 'User' },
-  state: { type: String },                          //好友状态 0表示已为好友 1表示申请中 2表示未通过
+  state: { type: String },                          //好友状态 0表示已为好友 1表示申请中 2表示尚未通过
   markname: { type: String },
   time: { type: Date },                              //好友状态建立时间
   lastTime: { type: Date }                           //好友最后通讯时间

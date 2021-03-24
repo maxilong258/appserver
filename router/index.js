@@ -7,6 +7,7 @@ const search = require('../server/search')
 const user = require('../server/userdetail')
 const friend = require('../server/friend')
 const index = require('../server/index')
+const chat = require('../server/chat')
 
 
 const router = express.Router()
@@ -85,6 +86,10 @@ router.post('/index/unreadmsg', (req, res) => {
 //消息标为已读
 router.post('/index/updatemsg', (req, res) => {
   index.updateMsg(req, res)
+})
+
+router.post('/chat/msg', (req, res) => {
+  chat.msg(req, res)
 })
 
 module.exports = router
