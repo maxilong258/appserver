@@ -92,4 +92,9 @@ router.post('/chat/msg', (req, res) => {
   chat.msg(req, res)
 })
 
+//更新消息状态
+router.post('/chat/updatemsg', (req, res) => {
+  chat.updateMsg(req, res)
+})
+
 module.exports = router

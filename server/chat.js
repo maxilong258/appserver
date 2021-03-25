@@ -5,3 +5,9 @@ module.exports.msg = (req, res) => {
   let data = req.body
   dbserver.msg(data, res)
 }
+
+//更新未读消息数
+module.exports.updateMsg = (req, res) => {
+  let data = req.body
+  dbserver.updateMsg(data, res)
+}

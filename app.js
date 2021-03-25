@@ -6,7 +6,11 @@ const jwt = require('./dao/jwt')
 
 const port = 2333
 const app = express()
-
+// const app1 = require('express')()
+// var http = require('http').createServer(app1);
+const server = app.listen(3000)
+const io = require('socket.io')(server)
+require('./dao/socket')(io)
 
 
 app.all('*', function (req, res, next) {

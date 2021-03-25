@@ -191,7 +191,7 @@ module.exports.buildFriend = (uid, fid, state, res) => {
 //好友最后通讯时间
 module.exports.upFriendLastTime = (data) => {
   const wherestr = { $or: [{ 'userID': data.uid, 'friendID': data.fid }, { 'userID': data.fid, friendID: data.uid }] }
-  const updatestr = { 'lsatTime': new Date() }
+  const updatestr = { 'lastTime': new Date() }
   Friend.updateMany(wherestr, updatestr, (err, result) => {
     if (err) console.log('更新好友最后通讯时间出错');
     //else res.send({ status: 200 })
@@ -210,8 +210,11 @@ module.exports.insertMsg = (uid, fid, msg, type, res) => {
   }
   const message = new Message(data)
   message.save((err, result) => {
-    if (err) res.send({ status: 500 })
-    else res.send({ status: 200 })
+    if (err) {
+      if (res) res.send({ status: 500 })
+    } else {
+      if (res) res.send({ status: 200 })
+    }
   })
 }
 
@@ -300,7 +303,7 @@ module.exports.unreadMsg = (data, res) => {
 
 //一对一消息状态修改
 module.exports.updateMsg = (data, res) => {
-  const wherestr = { 'userID': data.uid, 'friendID': data.fid, 'state': 1 }
+  const wherestr = { 'userID': data.fid, 'friendID': data.uid, 'state': 1 }
   const updatestr = { 'state': 0 }
   Message.updateMany(wherestr, updatestr, (err, result) => {
     if (err) res.send({ status: 500 })
