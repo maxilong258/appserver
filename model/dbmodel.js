@@ -7,7 +7,7 @@ var UserSchema = new Schema({
   psw: { type: String },
   email: { type: String },
   sex: { type: String, default: 'asexual' },
-  brith: { type: Date },
+  birth: { type: Date },
   phone: { type: Number },
   explain: { type: String },
   imgurl: { type: String, default: '/user/user.png' },

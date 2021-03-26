@@ -294,7 +294,7 @@ module.exports.getOneMsg = (data, res) => {
 
 //汇总未读一对一消息数
 module.exports.unreadMsg = (data, res) => {
-  const wherestr = { 'userID': data.uid, 'friendID': data.fid, 'state': 1 }
+  const wherestr = { 'userID': data.fid, 'friendID': data.uid, 'state': 1 }
   Message.countDocuments(wherestr, (err, result) => {
     if (err) res.send({ status: 500 })
     else res.send({ status: 200, result })
